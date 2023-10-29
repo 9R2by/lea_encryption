@@ -1,0 +1,10 @@
+venv
+.idea
+CMakeCache.txt
+cmake_install.cmake
+testing
+Makefile
+env
+cipher.texts
+CMakeFiles
+cmake-build-debug

@@ -45,15 +45,10 @@
 #define rotateRightBy3(x) _rotr(x, 3)
 #define endian_conversion(x) __asm__ volatile ("bswap %0" : "+r" (x))
 
-
-/*void encrypt(uint32_t *x0, uint32_t *x1, uint32_t *x2, uint32_t *x3, uint32_t *tmp,
-             uint32_t *roundkey_arr){
-}*/
-
 /**
  * 10111213 14151617 18191a1b 1c1d1e1f => 9fc84e35 28c6c618 5532c7a7 04648bfd
  * 269554195 336926231 404298267 471670303
- * Input: 4x 32bit wide number NOT HEX
+ * Input: 4x 32bit wide unsigned int NOT HEX
  * Will print the generated ciphertext to the console where the program was called in
  * @param argc
  * @param argv
@@ -67,7 +62,13 @@ int main(__attribute__((unused)) int argc, char *argv[]) {
     x1 = strtoul(argv[2], NULL, 10);
     x2 = strtoul(argv[3], NULL, 10);
     x3 = strtoul(argv[4], NULL, 10);
-    //start here
+
+    uint64_t start, end;
+    uint32_t ui;
+    MFENCE
+    start = __rdtscp(&ui);
+    LFENCE
+
     endian_conversion(x0);
     endian_conversion(x1);
     endian_conversion(x2);
@@ -96,158 +97,170 @@ int main(__attribute__((unused)) int argc, char *argv[]) {
 
     //round 4
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[12]) + (x1 ^ roundkey_arr[13]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[14]) + (x2 ^ roundkey_arr[13]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[15]) + (x3 ^ roundkey_arr[13]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[12]) + (x1 ^ roundkey_arr[13]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[14]) + (x2 ^ roundkey_arr[13]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[15]) + (x3 ^ roundkey_arr[13]));
     x3 = tmp;
 
     //round 5
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[16]) + (x1 ^ roundkey_arr[17]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[18]) + (x2 ^ roundkey_arr[17]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[19]) + (x3 ^ roundkey_arr[17]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[16]) + (x1 ^ roundkey_arr[17]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[18]) + (x2 ^ roundkey_arr[17]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[19]) + (x3 ^ roundkey_arr[17]));
     x3 = tmp;
 
     //round 6
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[20]) + (x1 ^ roundkey_arr[21]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[22]) + (x2 ^ roundkey_arr[21]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[23]) + (x3 ^ roundkey_arr[21]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[20]) + (x1 ^ roundkey_arr[21]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[22]) + (x2 ^ roundkey_arr[21]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[23]) + (x3 ^ roundkey_arr[21]));
     x3 = tmp;
 
     //round 7
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[24]) + (x1 ^ roundkey_arr[25]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[26]) + (x2 ^ roundkey_arr[25]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[27]) + (x3 ^ roundkey_arr[25]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[24]) + (x1 ^ roundkey_arr[25]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[26]) + (x2 ^ roundkey_arr[25]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[27]) + (x3 ^ roundkey_arr[25]));
     x3 = tmp;
 
     //round 8
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[28]) + (x1 ^ roundkey_arr[29]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[30]) + (x2 ^ roundkey_arr[29]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[31]) + (x3 ^ roundkey_arr[29]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[28]) + (x1 ^ roundkey_arr[29]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[30]) + (x2 ^ roundkey_arr[29]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[31]) + (x3 ^ roundkey_arr[29]));
     x3 = tmp;
 
     //round 9
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[32]) + (x1 ^ roundkey_arr[33]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[34]) + (x2 ^ roundkey_arr[33]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[35]) + (x3 ^ roundkey_arr[33]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[32]) + (x1 ^ roundkey_arr[33]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[34]) + (x2 ^ roundkey_arr[33]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[35]) + (x3 ^ roundkey_arr[33]));
     x3 = tmp;
 
     //round 10
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[36]) + (x1 ^ roundkey_arr[37]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[38]) + (x2 ^ roundkey_arr[37]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[39]) + (x3 ^ roundkey_arr[37]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[36]) + (x1 ^ roundkey_arr[37]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[38]) + (x2 ^ roundkey_arr[37]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[39]) + (x3 ^ roundkey_arr[37]));
     x3 = tmp;
 
     //round 11
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[40]) + (x1 ^ roundkey_arr[41]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[42]) + (x2 ^ roundkey_arr[41]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[43]) + (x3 ^ roundkey_arr[41]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[40]) + (x1 ^ roundkey_arr[41]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[42]) + (x2 ^ roundkey_arr[41]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[43]) + (x3 ^ roundkey_arr[41]));
     x3 = tmp;
 
     //round 12
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[44]) + (x1 ^ roundkey_arr[45]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[46]) + (x2 ^ roundkey_arr[45]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[47]) + (x3 ^ roundkey_arr[45]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[44]) + (x1 ^ roundkey_arr[45]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[46]) + (x2 ^ roundkey_arr[45]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[47]) + (x3 ^ roundkey_arr[45]));
     x3 = tmp;
 
     //round 13
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[48]) + (x1 ^ roundkey_arr[49]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[50]) + (x2 ^ roundkey_arr[49]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[51]) + (x3 ^ roundkey_arr[49]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[48]) + (x1 ^ roundkey_arr[49]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[50]) + (x2 ^ roundkey_arr[49]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[51]) + (x3 ^ roundkey_arr[49]));
     x3 = tmp;
 
     //round 14
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[52]) + (x1 ^ roundkey_arr[53]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[54]) + (x2 ^ roundkey_arr[53]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[55]) + (x3 ^ roundkey_arr[53]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[52]) + (x1 ^ roundkey_arr[53]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[54]) + (x2 ^ roundkey_arr[53]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[55]) + (x3 ^ roundkey_arr[53]));
     x3 = tmp;
 
     //round 14
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[56]) + (x1 ^ roundkey_arr[57]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[58]) + (x2 ^ roundkey_arr[57]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[59]) + (x3 ^ roundkey_arr[57]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[56]) + (x1 ^ roundkey_arr[57]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[58]) + (x2 ^ roundkey_arr[57]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[59]) + (x3 ^ roundkey_arr[57]));
     x3 = tmp;
 
     //round 15
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[60]) + (x1 ^ roundkey_arr[61]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[62]) + (x2 ^ roundkey_arr[61]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[63]) + (x3 ^ roundkey_arr[61]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[60]) + (x1 ^ roundkey_arr[61]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[62]) + (x2 ^ roundkey_arr[61]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[63]) + (x3 ^ roundkey_arr[61]));
     x3 = tmp;
 
     //round 16
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[64]) + (x1 ^ roundkey_arr[65]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[66]) + (x2 ^ roundkey_arr[65]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[67]) + (x3 ^ roundkey_arr[65]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[64]) + (x1 ^ roundkey_arr[65]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[66]) + (x2 ^ roundkey_arr[65]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[67]) + (x3 ^ roundkey_arr[65]));
     x3 = tmp;
 
     //round 17
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[68]) + (x1 ^ roundkey_arr[69]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[70]) + (x2 ^ roundkey_arr[69]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[71]) + (x3 ^ roundkey_arr[69]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[68]) + (x1 ^ roundkey_arr[69]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[70]) + (x2 ^ roundkey_arr[69]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[71]) + (x3 ^ roundkey_arr[69]));
     x3 = tmp;
 
     //round 18
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[72]) + (x1 ^ roundkey_arr[73]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[74]) + (x2 ^ roundkey_arr[73]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[75]) + (x3 ^ roundkey_arr[73]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[72]) + (x1 ^ roundkey_arr[73]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[74]) + (x2 ^ roundkey_arr[73]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[75]) + (x3 ^ roundkey_arr[73]));
     x3 = tmp;
 
 
     //round 19
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[76]) + (x1 ^ roundkey_arr[77]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[78]) + (x2 ^ roundkey_arr[77]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[79]) + (x3 ^ roundkey_arr[77]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[76]) + (x1 ^ roundkey_arr[77]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[78]) + (x2 ^ roundkey_arr[77]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[79]) + (x3 ^ roundkey_arr[77]));
     x3 = tmp;
 
     //round 20
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[80]) + (x1 ^ roundkey_arr[81]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[82]) + (x2 ^ roundkey_arr[81]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[83]) + (x3 ^ roundkey_arr[81]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[80]) + (x1 ^ roundkey_arr[81]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[82]) + (x2 ^ roundkey_arr[81]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[83]) + (x3 ^ roundkey_arr[81]));
     x3 = tmp;
 
     //round 21
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[84]) + (x1 ^ roundkey_arr[85]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[86]) + (x2 ^ roundkey_arr[85]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[87]) + (x3 ^ roundkey_arr[85]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[84]) + (x1 ^ roundkey_arr[85]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[86]) + (x2 ^ roundkey_arr[85]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[87]) + (x3 ^ roundkey_arr[85]));
     x3 = tmp;
 
     //round 22
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[88]) + (x1 ^ roundkey_arr[89]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[90]) + (x2 ^ roundkey_arr[89]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[91]) + (x3 ^ roundkey_arr[89]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[88]) + (x1 ^ roundkey_arr[89]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[90]) + (x2 ^ roundkey_arr[89]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[91]) + (x3 ^ roundkey_arr[89]));
     x3 = tmp;
 
     //round 23
     tmp = x0;
-    x0 = __rold((x0 ^ roundkey_arr[92]) + (x1 ^ roundkey_arr[93]), 9);
-    x1 = __rord((x1 ^ roundkey_arr[94]) + (x2 ^ roundkey_arr[93]), 5);
-    x2 = __rord((x2 ^ roundkey_arr[95]) + (x3 ^ roundkey_arr[93]), 3);
+    x0 = rotateLeftBy9((x0 ^ roundkey_arr[92]) + (x1 ^ roundkey_arr[93]));
+    x1 = rotateRightBy5((x1 ^ roundkey_arr[94]) + (x2 ^ roundkey_arr[93]));
+    x2 = rotateRightBy3((x2 ^ roundkey_arr[95]) + (x3 ^ roundkey_arr[93]));
     x3 = tmp;
 
     endian_conversion(x0);
     endian_conversion(x1);
     endian_conversion(x2);
     endian_conversion(x3);
+
+
+    MFENCE
+    end = __rdtscp(&ui);
+    LFENCE
+    printf("%lu %u %u %u %u\n", (end - start), x0, x1, x2, x3);
+
     //io is excluded from measuring
-    //io is included here so the compiler will not remove the whole the unused code
-    printf("%u\n%u\n%u\n%u\n", x0, x1, x2, x3);
+    FILE *file = fopen("cipher.texts", "a");
+    if (file == NULL) {
+        printf("Unable to open/create the file.\n");
+        return EXIT_FAILURE;
+    }
+    fprintf(file, "%u\n%u\n%u\n%u\n", x0, x1, x2, x3);
+    fclose(file);
     return EXIT_SUCCESS;
 }

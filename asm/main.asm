@@ -31,6 +31,8 @@ main:                                   # @main
 	xor	esi, esi
 	mov	edx, 10
 	call	strtoul@PLT
+	
+	//367 instructions
 	bswap	r14d
 	bswap	r15d
 	bswap	ebx
@@ -399,6 +401,8 @@ main:                                   # @main
 	bswap	edx
 	bswap	ecx
 	bswap	r8d
+
+
 	lea	rdi, [rip + .L.str]
 	xor	eax, eax
 	call	printf@PLT

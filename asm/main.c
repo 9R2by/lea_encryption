@@ -63,12 +63,6 @@ int main(__attribute__((unused)) int argc, char *argv[]) {
     x2 = strtoul(argv[3], NULL, 10);
     x3 = strtoul(argv[4], NULL, 10);
 
-    uint64_t start, end;
-    uint32_t ui;
-    MFENCE
-    start = __rdtscp(&ui);
-    LFENCE
-
     endian_conversion(x0);
     endian_conversion(x1);
     endian_conversion(x2);
@@ -249,18 +243,7 @@ int main(__attribute__((unused)) int argc, char *argv[]) {
     endian_conversion(x3);
 
 
-    MFENCE
-    end = __rdtscp(&ui);
-    LFENCE
-    printf("%lu %u %u %u %u\n", (end - start), x0, x1, x2, x3);
+    printf("%u %u %u %u\n", x0, x1, x2, x3);
 
-    //io is excluded from measuring
-    FILE *file = fopen("cipher.texts", "a");
-    if (file == NULL) {
-        printf("Unable to open/create the file.\n");
-        return EXIT_FAILURE;
-    }
-    fprintf(file, "%u\n%u\n%u\n%u\n", x0, x1, x2, x3);
-    fclose(file);
     return EXIT_SUCCESS;
 }

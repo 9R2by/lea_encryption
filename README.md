@@ -86,7 +86,6 @@ As of 05.11.2023 I haven't found more recent data.
 ### Tested On
 
 * Fedora 38
-* Debian 12.2
 
 ### Note
 Only the parts of the algorithm that are necessary for the encryption

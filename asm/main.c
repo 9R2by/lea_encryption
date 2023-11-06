@@ -56,7 +56,8 @@
  */
 //maybe return value instead of 0 to system
 int main(__attribute__((unused)) int argc, char *argv[]) {
-    register uint32_t x0, x1, x2, x3, tmp;
+    //register uint32_t x0, x1, x2, x3, tmp;
+    uint32_t x0, x1, x2, x3, tmp;
     uint32_t roundkey_arr[ROUNDKEY_ARRAY_SIZE] = ROUNDKEYS;
     x0 = strtoul(argv[1], NULL, 10);
     x1 = strtoul(argv[2], NULL, 10);

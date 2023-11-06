@@ -1,6 +1,6 @@
 	.text
 	.intel_syntax noprefix
-	.file	"main.c"
+	.file	"main_with_benchmark.c"
 	.section	.rodata.cst16,"aM",@progbits,16
 	.p2align	4, 0x0                          # -- Begin function main
 .LCPI0_0:

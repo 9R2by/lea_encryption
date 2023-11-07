@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 if __name__ == '__main__':
-    path_to_binary = './target/lea_encryption.exe'
+    path_to_binary = './target/lea_encryption'
     fig, ax = plt.subplots()
     output_text = ''
-    n = pow(2, 10)
+    n = pow(2, 12)
     median_arr = []
 
     for _ in tqdm(range(n + 1), desc="Loading", unit="Runs"):

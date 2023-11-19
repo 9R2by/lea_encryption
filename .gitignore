@@ -7,3 +7,4 @@ Makefile
 env
 cipher.texts
 CMakeFiles
+cmake-build-debug

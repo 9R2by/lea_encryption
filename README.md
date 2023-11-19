@@ -3,7 +3,7 @@
 ### LEA Encryption Algorithm with pre generated round keys
 
 ### Dependencies
-* clang 17.0.1
+* gcc 13.2.1
 
 * cmake 3.26
     * pip install cmake
@@ -13,7 +13,7 @@
 Note: You don't have to use *cmake*, but it is more convenient.
 You can use *clang* by manually executing the following command:
 ```bash
-clang main.c -O3 -march=icelake-client -Wall -Wextra -Wpedantic -o ./target/lea_encryption
+gcc main.c -O3 -march=native -Wall -Wextra -Wpedantic -o ./target/lea_encryption
 ```
 ### Building From Source
 
@@ -85,7 +85,7 @@ As of 05.11.2023 I haven't found more recent data.
 
 ### Tested On
 
-* Fedora 38
+* Fedora 39
 
 ### Note
 Only the parts of the algorithm that are necessary for the encryption

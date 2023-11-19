@@ -12,6 +12,7 @@ if __name__ == '__main__':
     # n = pow(2, 18)   below 1 mb of data: 8.000.000 / 128 = 62.500
     n = 62500
     median_arr = []
+    temp_median_arr = []
 
     for _ in tqdm(range(n + 1), desc="Loading", unit="Runs"):
         command = [path_to_binary, str(random.getrandbits(32)), str(random.getrandbits(32)),
@@ -21,6 +22,7 @@ if __name__ == '__main__':
         stdout, stderr = process.communicate()
         cycles = int(stdout.split()[0])
         median_arr.append(cycles)
+        temp_median_arr.append(cycles)
 
     ax.plot(signal.medfilt(median_arr), label=f'Median filtered encryption algorithm cycles per run')
     ax.set_xlabel('n')
@@ -28,4 +30,4 @@ if __name__ == '__main__':
     ax.set_title('LEA Encryption')
     ax.legend()
     plt.savefig('output_plot.svg', format='svg')
-    print(statistics.median(median_arr))
+    print(statistics.median(temp_median_arr))

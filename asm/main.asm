@@ -55,29 +55,16 @@ main:
 	mov	r9d, r12d
 	or	rdi, rdx
 	lfence
-#APP
-# 73 "main.c" 1
+
+
+
 	bswap r9d
-# 0 "" 2
-#NO_APP
 	mov	ecx, ebp
-#APP
-# 74 "main.c" 1
 	bswap ecx
-# 0 "" 2
-#NO_APP
 	mov	edx, ebx
-#APP
-# 75 "main.c" 1
 	bswap edx
-# 0 "" 2
-#NO_APP
 	mov	eax, esi
-#APP
-# 76 "main.c" 1
 	bswap eax
-# 0 "" 2
-#NO_APP
 	mov	r8d, r9d
 	mov	esi, ecx
 	xor	ecx, 424639921
@@ -429,36 +416,22 @@ main:
 	xor	edx, -546766179
 	add	r12d, edx
 	rorx	r12d, r12d, 23
-#APP
-# 247 "main.c" 1
 	bswap r12d
-# 0 "" 2
-#NO_APP
 	mov	edx, ebx
 	xor	ebp, 1534210138
 	xor	edx, -546766179
 	add	ebp, edx
 	rorx	ebp, ebp, 5
-#APP
-# 248 "main.c" 1
 	bswap ebp
-# 0 "" 2
-#NO_APP
 	xor	ebx, -884489825
 	xor	eax, -546766179
 	add	ebx, eax
 	rorx	ebx, ebx, 3
-#APP
-# 249 "main.c" 1
 	bswap ebx
-# 0 "" 2
-#NO_APP
 	mov	r14d, r9d
-#APP
-# 250 "main.c" 1
 	bswap r14d
-# 0 "" 2
-#NO_APP
+
+
 	mfence
 	rdtscp
 	mov	DWORD PTR [rsp+12], ecx

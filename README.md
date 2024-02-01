@@ -77,6 +77,6 @@ Some but not all optimizations done include:
 * Fedora 39
   
 ### Note
-Only the parts of the algorithm that are necessary for the key
+Only the parts of the algorithm that are necessary for the encryption 
 are cycle measured, not the input and output operations.
 
